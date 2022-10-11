@@ -18,6 +18,7 @@ export class RegisterComponent implements OnInit {
 
   onSubmit(register: NgForm)
   {
+    console.log(register);
     if (register.valid === true)
     {
       this.authService.registerUser(register.value).subscribe(result => {

@@ -15,7 +15,7 @@
                 <i class="fa-solid fa-share"></i>
             </button>
             <button type="button" class="btn-close bg-danger p-3" data-bs-toggle="modal"
-                data-bs-target="#deleteWorkspace"></button>
+                data-bs-target="#deleteWorkspace" *ngIf="isOwner"></button>
         </div>
     </div>
     <form class="mb-3 d-flex p-3 bg-main rounded-2" #addItem="ngForm" (ngSubmit)="onAddItem(addItem)" *ngIf="canEdit">
@@ -28,16 +28,16 @@
         <div class="d-flex bg-light text-dark p-3 rounded-2 justify-content-between align-items-center mb-3" *ngFor="let item of items">
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" id="disabledFieldsetCheck" [checked]="item.isDone"
-                    [disabled]="loading" (change)="onChangeItemState(item)">
+                    [disabled]="loading || !canEdit" (change)="onChangeItemState(item)">
                 <p class="p-0 m-0" *ngIf="item.isDone === false">{{item.content}}</p>
                 <p class="p-0 m-0" *ngIf="item.isDone === true"><del>{{item.content}}</del></p>
             </div>
             <div>
                 <button class="btn btn-warning me-2" data-bs-toggle="modal" data-bs-target="#itemEdit"
-                    (click)="onSelectItem(item)">
+                    (click)="onSelectItem(item)" *ngIf="canEdit">
                     <i class="fa-solid fa-pen-to-square"></i>
                 </button>
-                <button class="btn btn-danger" (click)="onDeleteItem(item)">
+                <button class="btn btn-danger" (click)="onDeleteItem(item)" *ngIf="canEdit">
                     <i class="fa-solid fa-trash"></i>
                 </button>
             </div>

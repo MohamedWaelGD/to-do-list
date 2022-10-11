@@ -5,7 +5,7 @@
     </div>
     <div class="mb-3">
         <label for="email" class="form-label">Email address</label>
-        <input #email="ngModel" type="email" class="form-control" id="email" required ngModel name="email" placeholder="example@email.com">
+        <input #email="ngModel" email type="email" class="form-control" id="email" required ngModel name="email" placeholder="example@email.com">
         <div *ngIf="email.touched && email.invalid" class="text-danger mt-2">Enter valid email</div>
     </div>
     <div class="mb-3">

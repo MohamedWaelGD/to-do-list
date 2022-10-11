@@ -71,7 +71,7 @@ export class WorkspaceComponent implements OnInit, OnChanges {
             this.isOwner = true;
             this.canEdit = true;
           }
-          if (element.user === this.userProfile.email && element.role === "Partner")
+          if (element.user.email === this.userProfile.email && element.role === "Partner")
           {
             this.canEdit = true;
           }
