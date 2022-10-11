@@ -1,0 +1,199 @@
+<div class="container text-white" *ngIf="selectedWorkspace">
+    <div class="p-3 bg-main rounded-2 d-flex justify-content-between align-items-center">
+        <h1>{{workspaceTitle}}</h1>
+        <div class="d-flex align-items-center">
+            <button #editWorkspaceName type="button" class="btn btn-out btn-warning text-main me-2" style="width: 48px; height: 48px;"
+                data-bs-toggle="modal" data-bs-target="#editWorkspaceName" *ngIf="isOwner">
+                <i class="fa-solid fa-pen-to-square"></i>
+            </button>
+            <button #userWorkspacesBtn type="button" class="btn btn-light text-main me-2" style="width: 48px; height: 48px;" data-bs-toggle="modal"
+                data-bs-target="#usersWorkspace" (click)="getUsersWorkspace()">
+                <i class="fa-solid fa-users"></i>
+            </button>
+            <button type="button" class="btn btn-out btn-light text-main me-2" style="width: 48px; height: 48px;"
+                data-bs-toggle="modal" data-bs-target="#shareWorkspace" *ngIf="isOwner">
+                <i class="fa-solid fa-share"></i>
+            </button>
+            <button type="button" class="btn-close bg-danger p-3" data-bs-toggle="modal"
+                data-bs-target="#deleteWorkspace"></button>
+        </div>
+    </div>
+    <form class="my-3 d-flex p-3 bg-main rounded-2" #addItem="ngForm" (ngSubmit)="onAddItem(addItem)">
+        <input #content ngModel class="form-control me-2" placeholder="What needs to be done?" name="content"
+            type="text">
+        <button type="submit" class="btn btn-light text-main d-flex justify-content-center align-items-center w-25"><i
+                class="fa-solid fa-plus me-2"></i> Add Item</button>
+    </form>
+    <div class="p-3 bg-main rounded-2">
+        <div class="d-flex bg-light text-dark p-3 rounded-2 justify-content-between align-items-center mb-3" *ngFor="let item of items">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="disabledFieldsetCheck" [checked]="item.isDone"
+                    [disabled]="loading" (change)="onChangeItemState(item)">
+                <p class="p-0 m-0" *ngIf="item.isDone === false">{{item.content}}</p>
+                <p class="p-0 m-0" *ngIf="item.isDone === true"><del>{{item.content}}</del></p>
+            </div>
+            <div>
+                <button class="btn btn-warning me-2" data-bs-toggle="modal" data-bs-target="#itemEdit"
+                    (click)="onSelectItem(item)">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </button>
+                <button class="btn btn-danger" (click)="onDeleteItem(item)">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div *ngIf="!selectedWorkspace" class="d-flex flex-column justify-content-center align-items-center" style="min-height: 70vh;">
+    <div class="text-center bg-dotted-main p-5 rounded-2">
+        <h1 class="text-main">Select or create a workspace</h1>
+        <i class="fa-solid fa-box-open text-main" style="font-size: 160px;"></i>
+    </div>
+</div>
+<div>
+    <div>
+        <div class="modal fade" id="usersWorkspace" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <form class="modal-content bg-dark" #input="ngForm" (submit)="shareWorkspace(input)">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="exampleModalLabel">Delete Workspace</h3>
+                        <button #usersWorkspaceClose type="button" class="btn-close bg-danger" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-dark text-center">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Username</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Role</th>
+                                    <th scope="col" *ngIf="isOwner">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of usersOfWorkspace">
+                                    <td>{{item.user.username}}</td>
+                                    <td>{{item.user.email}}</td>
+                                    <td>{{item.role}}</td>
+                                    <td *ngIf="item.role != 'Owner' && isOwner">
+                                        <button class="btn btn-warning" type="button" data-bs-toggle="modal" data-bs-target="#userEditWorkspace" (click)="selectUserWorkspace(item)">
+                                            <i class="fa-solid fa-user-pen"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="modal fade" id="userEditWorkspace" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <form class="modal-content bg-dark" #input="ngForm" (submit)="editUserWorkspace(input)" *ngIf="selectedUser">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="exampleModalLabel">Delete Workspace</h3>
+                        <button #usersWorkspaceClose type="button" class="btn-close bg-danger" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <label for="email" class="mb-2">Cooperator's Email</label>
+                        <input [(ngModel)]="cooperatorEmail" name="userEmail" placeholder="cooperator's email" class="form-control"
+                            type="email" disabled/>
+                        <label for="email" class="my-2">Enter Cooperator's Role</label>
+                        <select [(ngModel)]="cooperatorRole" name="role" class="form-select" required>
+                            <option value="" selected disabled>Cooperator's Role</option>
+                            <option [value]="1">Partner</option>
+                            <option [value]="2">Visitor</option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#usersWorkspace">Back</button>
+                        <button type="submit" class="btn btn-primary">Share</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="editWorkspaceName" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <form class="modal-content bg-dark" #input="ngForm" (submit)="editWorkspace(input)">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="exampleModalLabel">Edit Workspace</h3>
+                    <button #shareWorkspaceClose type="button" class="btn-close bg-danger" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label for="name" class="mb-2">Enter Workspace's Name</label>
+                    <input [(ngModel)]="workspaceNameInput" name="name" placeholder="Workspace name" class="form-control"
+                        type="text" required />
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal fade" id="shareWorkspace" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <form class="modal-content bg-dark" #input="ngForm" (submit)="shareWorkspace(input)">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="exampleModalLabel">Delete Workspace</h3>
+                    <button #shareWorkspaceClose type="button" class="btn-close bg-danger" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label for="email" class="mb-2">Enter Cooperator's Email</label>
+                    <input #userEmail ngModel name="userEmail" placeholder="cooperator's email" class="form-control"
+                        type="email" required />
+                    <label for="email" class="my-2">Enter Cooperator's Role</label>
+                    <select #role ngModel name="role" class="form-select" required>
+                        <option value="" selected disabled>Cooperator's Role</option>
+                        <option [value]="1">Partner</option>
+                        <option [value]="2">Visitor</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Share</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal fade" id="deleteWorkspace" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content bg-dark">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="exampleModalLabel">Delete Workspace</h3>
+                    <button type="button" class="btn-close bg-danger" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h4>Are you sure you want to delete this workspace?</h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
+                        (click)="deleteWorkspace()">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="itemEdit" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content bg-dark" *ngIf="selectedItem">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="exampleModalLabel">Edit Item</h3>
+                    <button type="button" class="btn-close bg-danger" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input #editName class="form-control" type="text" [value]="selectedItem.content" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                        (click)="editItem(editName)">Save
+                        changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

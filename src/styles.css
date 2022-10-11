@@ -1,1 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
+.text-main {
+    color: rgb(119, 0, 255) !important;
+}
+
+.bg-main {
+    background-color: rgb(119, 0, 255) !important;
+}

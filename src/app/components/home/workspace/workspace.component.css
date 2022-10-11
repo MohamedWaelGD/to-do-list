@@ -1,0 +1,5 @@
+.bg-dotted-main {
+    outline-color: rgb(119, 0, 255) !important;
+    outline-style: dashed;
+    background-color: rgb(245, 245, 245);
+}

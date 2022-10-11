@@ -1,0 +1,25 @@
+<app-header></app-header>
+<div class="w-100 position-relative text-white container">
+    <div class="position-absolute top-0 bottom-0 p-3" style="width: 300px">
+        <form class="mb-1" #workspace="ngForm" (ngSubmit)="onSubmitWorkspace(workspace)">
+            <div class="p-2 rounded-2 bg-main">
+                <label for="name">Add Workspace</label>
+                <div class="d-flex align-items-center mt-2">
+                    <input #name ngModel name="name" id="name" class="form-control h-100 me-2" type="text" required placeholder="Workspace name..."/>
+                    <button class="btn btn-success">Add</button>
+                </div>
+            </div>
+        </form>
+        <div class="row p-2">
+            <div class="bg-main rounded-2">
+                <h3 class="text-center my-2">Your workspaces</h3>
+                <div class="col-12 my-2 d-flex align-items-center" *ngFor="let workspace of workspaces">
+                    <button class="btn btn-light text-main w-100 fw-bold" (click)="onSelectWorkspace(workspace)">{{workspace.name}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="p-3" style="margin-left: 300px;">
+        <app-workspace [selectedWorkspace]="selectedWorkspace" (onWorkspaceDeleted)="getWorkspaces()"></app-workspace>
+    </div>
+</div>

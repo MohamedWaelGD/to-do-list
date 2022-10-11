@@ -1,0 +1,17 @@
+<div class="row w-100" style="min-height: 100vh;">
+    <div class="col-6 col-sm-8 position-relative" style="background-image: url(../../../../assets/wallpaper.jpg); background-position: center; background-repeat: no-repeat; background-size: cover;">
+        <div class="position-absolute top-0 bottom-0" style="background-color: rgba(98, 0, 255, 0.6); right: 0; left: 0; z-index: 1;"></div>
+        <div class="position-relative text-white fw-bold h-100 d-flex flex-column justify-content-end p-5" style="z-index: 5;">
+            <h1>Welcome in Todo List App</h1>
+            <h6>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</h6>
+            <hr/>
+            <div>
+                <p>Ph - (+20 01007603102) | Email - (mohamedwael.gd@gmail.com)</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-sm-4 d-flex align-items-center">
+        <app-login *ngIf="router == '/login'" class="w-100"></app-login>
+        <app-register *ngIf="router == '/register'" class="w-100"></app-register>
+    </div>
+</div>

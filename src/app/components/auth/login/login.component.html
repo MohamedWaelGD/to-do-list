@@ -1,0 +1,27 @@
+<form class="w-100 p-3" #login="ngForm" (ngSubmit)="onSubmit(login)">
+    <div class="text-center">
+        <h1 class="text-main"><i class="fa-solid fa-clipboard-check"></i> ToDoListApp</h1>
+        <p>Login into your Account</p>
+    </div>
+    <div class="mb-3">
+        <label for="email" class="form-label">Email address</label>
+        <input #email="ngModel" type="email" class="form-control" id="email" required ngModel name="email" placeholder="example@email.com">
+        <div *ngIf="email.touched && email.invalid" class="text-danger mt-2">Enter valid email</div>
+    </div>
+    <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input #password="ngModel" type="password" class="form-control" id="password" required ngModel name="password" placeholder="Password">
+        <div *ngIf="password.touched && password.invalid" class="text-danger mt-2">Enter valid password</div>
+    </div>
+    <div class="mb-3 form-check">
+        <input #remember ngModel name="remember" type="checkbox" class="form-check-input" id="remember">
+        <label class="form-check-label" for="remember">Remember me</label>
+    </div>
+    <div class="mb-3">
+        <span class="text-danger">{{errorMsg}}</span>
+    </div>
+    <div class="text-center mb-3">
+        <button type="submit" class="btn bg-main text-white rounded-5 mb-2 w-25">Sign in</button>
+    </div>
+    <p>Don't have an account? <a [routerLink]="['/register']">Sign up here</a></p>
+</form>
