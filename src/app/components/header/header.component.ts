@@ -45,7 +45,7 @@ export class HeaderComponent implements OnInit {
     console.log(input.value);
     this.authService.editProfile(input.value).subscribe({
       next: (result) => {
-        console.log(result);
+        this.user = result.data;
         this.profileBtn.nativeElement.click();
       },
       error: (error) => {

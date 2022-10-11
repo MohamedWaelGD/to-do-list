@@ -37,12 +37,15 @@ export class WorkspaceComponent implements OnInit, OnChanges {
   workspaceNameInput!: any;
 
   isOwner: boolean = false;
+  canEdit: boolean = false;
 
   constructor(private httpService:HttpService, private authService:AuthService, private modal:NgbModal) { }
   ngOnChanges(changes: SimpleChanges): void {
     this.getItems();
     if (this.selectedWorkspace)
     {
+      this.isOwner = false;
+      this.canEdit = false;
       this.workspaceTitle = this.selectedWorkspace.name;
       this.workspaceNameInput = this.selectedWorkspace.name;
       this.getUsersWorkspace();
@@ -66,6 +69,11 @@ export class WorkspaceComponent implements OnInit, OnChanges {
           if (element.user.email === this.userProfile.email && element.role === "Owner")
           {
             this.isOwner = true;
+            this.canEdit = true;
+          }
+          if (element.user === this.userProfile.email && element.role === "Partner")
+          {
+            this.canEdit = true;
           }
         });
       }
@@ -158,6 +166,7 @@ export class WorkspaceComponent implements OnInit, OnChanges {
     if (input.valid)
     {
       input.value.workspaceId = this.selectedWorkspace.id;
+      console.log(input.value);
       this.httpService.shareWorkspace(input.value).subscribe({
         next: (result) => {
           this.getItems();

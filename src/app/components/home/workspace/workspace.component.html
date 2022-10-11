@@ -1,5 +1,5 @@
 <div class="container text-white" *ngIf="selectedWorkspace">
-    <div class="p-3 bg-main rounded-2 d-flex justify-content-between align-items-center">
+    <div class="mb-3 p-3 bg-main rounded-2 d-flex justify-content-between align-items-center">
         <h1>{{workspaceTitle}}</h1>
         <div class="d-flex align-items-center">
             <button #editWorkspaceName type="button" class="btn btn-out btn-warning text-main me-2" style="width: 48px; height: 48px;"
@@ -11,14 +11,14 @@
                 <i class="fa-solid fa-users"></i>
             </button>
             <button type="button" class="btn btn-out btn-light text-main me-2" style="width: 48px; height: 48px;"
-                data-bs-toggle="modal" data-bs-target="#shareWorkspace" *ngIf="isOwner">
+                data-bs-toggle="modal" data-bs-target="#shareWorkspaceModal" *ngIf="isOwner">
                 <i class="fa-solid fa-share"></i>
             </button>
             <button type="button" class="btn-close bg-danger p-3" data-bs-toggle="modal"
                 data-bs-target="#deleteWorkspace"></button>
         </div>
     </div>
-    <form class="my-3 d-flex p-3 bg-main rounded-2" #addItem="ngForm" (ngSubmit)="onAddItem(addItem)">
+    <form class="mb-3 d-flex p-3 bg-main rounded-2" #addItem="ngForm" (ngSubmit)="onAddItem(addItem)" *ngIf="canEdit">
         <input #content ngModel class="form-control me-2" placeholder="What needs to be done?" name="content"
             type="text">
         <button type="submit" class="btn btn-light text-main d-flex justify-content-center align-items-center w-25"><i
@@ -55,7 +55,7 @@
     <div>
         <div class="modal fade" id="usersWorkspace" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">
-                <form class="modal-content bg-dark" #input="ngForm" (submit)="shareWorkspace(input)">
+                <form class="modal-content bg-dark" #usersWorkspace="ngForm" (submit)="shareWorkspace(usersWorkspace)">
                     <div class="modal-header">
                         <h3 class="modal-title" id="exampleModalLabel">Delete Workspace</h3>
                         <button #usersWorkspaceClose type="button" class="btn-close bg-danger" data-bs-dismiss="modal"
@@ -90,7 +90,7 @@
         </div>
         <div class="modal fade" id="userEditWorkspace" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">
-                <form class="modal-content bg-dark" #input="ngForm" (submit)="editUserWorkspace(input)" *ngIf="selectedUser">
+                <form class="modal-content bg-dark" #userEditWorkspace="ngForm" (submit)="editUserWorkspace(userEditWorkspace)" *ngIf="selectedUser">
                     <div class="modal-header">
                         <h3 class="modal-title" id="exampleModalLabel">Delete Workspace</h3>
                         <button #usersWorkspaceClose type="button" class="btn-close bg-danger" data-bs-dismiss="modal"
@@ -117,7 +117,7 @@
     </div>
     <div class="modal fade" id="editWorkspaceName" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
-            <form class="modal-content bg-dark" #input="ngForm" (submit)="editWorkspace(input)">
+            <form class="modal-content bg-dark" #editWorkspaceName="ngForm" (submit)="editWorkspace(editWorkspaceName)">
                 <div class="modal-header">
                     <h3 class="modal-title" id="exampleModalLabel">Edit Workspace</h3>
                     <button #shareWorkspaceClose type="button" class="btn-close bg-danger" data-bs-dismiss="modal"
@@ -134,9 +134,9 @@
             </form>
         </div>
     </div>
-    <div class="modal fade" id="shareWorkspace" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="shareWorkspaceModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
-            <form class="modal-content bg-dark" #input="ngForm" (submit)="shareWorkspace(input)">
+            <form class="modal-content bg-dark" #shareWorkspaceForm="ngForm" (submit)="shareWorkspace(shareWorkspaceForm)">
                 <div class="modal-header">
                     <h3 class="modal-title" id="exampleModalLabel">Delete Workspace</h3>
                     <button #shareWorkspaceClose type="button" class="btn-close bg-danger" data-bs-dismiss="modal"

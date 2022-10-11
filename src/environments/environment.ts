@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  API_URL: "https://localhost:7212/api/"
+  API_URL: "https://to-dolistapiapp.azurewebsites.net/api/"
 };
 
 /*
